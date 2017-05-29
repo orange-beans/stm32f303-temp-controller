@@ -27,7 +27,7 @@ int colorbuf[NUM_COLORS] = {0xff0000ff,0xffff0000,0xff00ff00,0xffffff00,0xffff80
 
 I2C i2c(D4, D5);
 Serial pc(USBTX, USBRX);
-Adafruit_ADS1015 ads(&i2c);
+// Adafruit_ADS1015 ads(&i2c);
 
 //****************************************************************************/
 // Defines PID parameters
@@ -113,11 +113,10 @@ double readRTD(double x) {
 int main() {
   double tempA, tempB, outA, outB;
   double read_bufferA[SAMPLES] = {25};
-  double read_bufferB[5] = {25};
+  double read_bufferB[SAMPLES] = {25};
   double sumA = 0, sumB = 0;
   long int reading = 0;
 
-  ads.setGain(GAIN_TWO);
   pc.attach(&readPC);
 
   heaterA.period_ms(50);
@@ -156,16 +155,6 @@ int main() {
     tempA = sumA/SAMPLES;
     tempB = sumB/SAMPLES;
 
-    // print the temperatures
-    // Read 10 times then average
-    for (int i=0; i<10; i++) {
-      //sumA += tempReadA.read();
-      //sumB += tempReadB.read();
-
-    }
-    //tempA = readRTD(sumA/10);
-    //tempB = readRTD(sumB/10);
-
     //printf("Tube Sealer Temperature A: %3.4f'C\n", temp*3.3);
     //printf("normalized: 0x%04X \n", tempReadA.read_u16());
     controllerA.setProcessValue(tempA);
@@ -192,23 +181,22 @@ int main() {
     // Update Heaters PWM output
     heaterA.write(outA);
     heaterB.write(outB);
-    pc.printf("Test %3.1f", 123.41);
     printf("HeaterA: Temp: %3.1f 'C, PWM: %3.3f %%; HeaterB: Temp: %3.1f 'C, PWM: %3.3f %%;\n", tempA, outA*100, tempB, outB*100);
     wait(RATE);
 
     // Test WS2812
     //ws.useII(WS2812::GLOBAL);
     //ws.setII(0xAA);
-    ws.write(&colorbuf[0]);
-    wait(RATE);
-    ws.write(&colorbuf[1]);
-    wait(RATE);
-    ws.write(&colorbuf[2]);
-    wait(RATE);
-    ws.write(&colorbuf[3]);
-    wait(RATE);
-    ws.write(&colorbuf[4]);
-    wait(RATE);
-    ws.write(&colorbuf[5]);
+    // ws.write(&colorbuf[0]);
+    // wait(RATE);
+    // ws.write(&colorbuf[1]);
+    // wait(RATE);
+    // ws.write(&colorbuf[2]);
+    // wait(RATE);
+    // ws.write(&colorbuf[3]);
+    // wait(RATE);
+    // ws.write(&colorbuf[4]);
+    // wait(RATE);
+    // ws.write(&colorbuf[5]);
   }
 }
